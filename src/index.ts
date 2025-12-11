@@ -10,12 +10,13 @@ const isObject = (obj: any): obj is Object => obj?.constructor === Object;
 const isFunction = (v: any): v is Function => typeof v === 'function';
 const identity = <T>(v: T): T => v;
 
-export const createFlowState = <T>(init: T) => {
+export const createFlowStore = <T>(init: T) => {
   let state = init;
   const listeners = new Set<Listener<T>>();
   const getState = () => state;
   const setState = (next: T) => (state = next);
   const getInit = () => init;
+  const resetState = () => update(init, true);
 
   const update = (
     partial: Partial<T> | ((prev: T) => Partial<T>),
@@ -40,8 +41,12 @@ export const createFlowState = <T>(init: T) => {
 
   const subscribe = (listener: Listener<T>) => {
     listeners.add(listener);
-    return () => listeners.delete(listener);
+    return () => unsubscribe(listener);
   };
+  const unsubscribe = (listener: Listener<T>) => {
+    listeners.delete(listener);
+  };
+  const unsubscribeAll = () => listeners.forEach(unsubscribe);
 
   const useFlowSelector = <U>(selector: (state: T) => U): [U, UpdateFn<T>] => {
     const slice = useSyncExternalStore(
@@ -61,6 +66,9 @@ export const createFlowState = <T>(init: T) => {
     getState,
     getInit,
     subscribe,
+    unsubscribe,
+    unsubscribeAll,
     notify,
+    resetState,
   };
 };

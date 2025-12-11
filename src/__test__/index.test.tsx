@@ -6,26 +6,35 @@ const TestComponent = () => {
   return <div></div>;
 };
 
-const store = createFlowState([
-  { age: 32, name: 'Jimmy Bananas' },
-  { age: 18, name: 'Jackie Mangoes' },
-]);
+const store = createFlowState({
+  users: [
+    { age: 32, name: 'Jimmy Bananas' },
+    { age: 18, name: 'Jackie Mangoes' },
+  ],
+  otherStuff: 'hi',
+});
 
 describe('A few tests to get started', () => {
   test('It should maintain referential equality for untouched objects.', () => {
     const { result: fullRes } = renderHook(() => store.useFlowState());
-    const { result: countRes } = renderHook(() =>
-      store.useFlowSelector((s) => s[1])
+    const { result: otherRes } = renderHook(() =>
+      store.useFlowSelector((s) => s.otherStuff)
     );
-    const [originalJackie] = countRes.current;
+    const [fullState] = fullRes.current;
+    const { users } = fullState;
+    const [jimmy] = users;
 
     act(() => {
-      const [, updateArray] = fullRes.current;
-      updateArray((draft) => {
-        draft[0].name = 'ha!';
-      });
+      fullRes.current[1]({ otherStuff: 'meh' });
     });
 
-    expect(originalJackie).toStrictEqual(fullRes.current[0][1]);
+    expect(jimmy).toStrictEqual(fullRes.current[0].users[0]);
+    expect(fullRes.current[0]).toEqual({
+      users: [
+        { age: 32, name: 'Jimmy Bananas' },
+        { age: 18, name: 'Jackie Mangoes' },
+      ],
+      otherStuff: 'meh',
+    });
   });
 });

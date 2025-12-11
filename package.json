@@ -1,0 +1,42 @@
+{
+  "name": "@flow-tools/flow-state",
+  "version": "1.0.0",
+  "description": "A minimal global React state library.",
+  "keywords": [
+    "React",
+    "state",
+    "global",
+    "hooks"
+  ],
+  "homepage": "https://github.com/flow-tools-dev/flow-state#readme",
+  "bugs": {
+    "url": "https://github.com/flow-tools-dev/flow-state/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flow-tools-dev/flow-state.git"
+  },
+  "license": "MIT",
+  "author": "Adam Allison",
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {
+    "test": "vitest"
+  },
+  "dependencies": {
+    "immer": "^11.0.1",
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2",
+    "react": "^19.2.1",
+    "tsdown": "^0.17.2",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "happy-dom": "^20.0.11",
+    "vitest": "^4.0.15"
+  }
+}

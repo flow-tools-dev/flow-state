@@ -120,15 +120,15 @@ You want middleware options? Ad-hoc subscriptions? Custom functionality written 
 Creates a new store.
 Returns:
 
-- **useFlowState(): [T, update]** - React hook to get full state and updater function. Works just like useState.
+- **useFlowState(): [T, update]** - React hook to get full state and updater function. Works just like useState, but with shallow merging.
 - **useFlowSelector(selector): [U, update]** - React hook to get a slice of state. Takes a selector function similar to RTK. Note - if the slice of state doesn't change, the component doesn't re-render. The update function is the same as the useFlowState above.
-- **update(partialOrFn, replace = false)** - Updates state. If the state changed, notify is called.
+- **update(partialOrFn, replace = false)** - Updates state. If the state changed, notify is called and all listeners are handed the new state.
   - If partialOrFn is a function, the current state is pass in and the result is shallow merged with the current state.
   - If partialOrFn is an object, it is shallow merged with the current state.
-  - If the partialOrFn is not an object literal, state is directly replaced.
+  - If the partialOrFn is not an object, state is directly replaced.
   - if replace is true, then state is directly replaced.
-- **getState** - returns the current state.
-- **getInit** - returns the initial state.
+- **getState** - Returns the current state.
+- **getInit** - Returns the initial state.
 - **subscribe** - Subscribes a function to state changes. Returns an unsubscribe function.
 - **unsubscribe** - Unsubscribes a given function from the value.
 - **unsubscribeAll** - Unsubscribes all listeners from the value.

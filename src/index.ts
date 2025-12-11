@@ -1,33 +1,42 @@
 import { useSyncExternalStore } from 'react';
 
 type Listener<T> = (state: T) => any;
-type UpdateFn<T> = (updater: Partial<T> | ((prev: T) => Partial<T>)) => void;
+type UpdateFn<T> = (
+  updater: Partial<T> | ((prev: T) => Partial<T>),
+  replace?: boolean
+) => void;
 
-const isObject = (obj: any) => obj?.constructor === Object;
+const isObject = (obj: any): obj is Object => obj?.constructor === Object;
+const isFunction = (v: any): v is Function => typeof v === 'function';
+const identity = <T>(v: T): T => v;
 
 export const createFlowState = <T>(init: T) => {
   let state = init;
   const listeners = new Set<Listener<T>>();
   const getState = () => state;
+  const setState = (next: T) => (state = next);
   const getInit = () => init;
 
-  const update = (partial: Partial<T> | ((prev: T) => Partial<T>)) => {
-    let next: T;
-
-    if (typeof partial === 'function') {
-      const result = partial(state);
-      if (isObject(result) && isObject(state)) next = { ...state, ...result };
-      else next = result as T;
-    } else if (isObject(state) && isObject(partial)) {
-      next = { ...state, ...partial };
-    } else {
-      next = partial as T; // non object replacement.
-    }
+  const update = (
+    partial: Partial<T> | ((prev: T) => Partial<T>),
+    replace: boolean = false
+  ) => {
+    const prev = getState();
+    const result = isFunction(partial) ? partial(prev) : partial;
+    const next =
+      !replace && [result, prev].every(isObject)
+        ? ({ ...prev, ...result } as T)
+        : (result as T);
 
     if (next !== state) {
-      state = next;
-      listeners.forEach((l) => l(state));
+      setState(next);
+      notify();
     }
+  };
+
+  const notify = () => {
+    const s = getState();
+    listeners.forEach((l) => l(s));
   };
 
   const subscribe = (listener: Listener<T>) => {
@@ -44,7 +53,7 @@ export const createFlowState = <T>(init: T) => {
     return [slice, update];
   };
 
-  const useFlowState = () => useFlowSelector((s) => s);
+  const useFlowState = () => useFlowSelector(identity);
 
   return {
     useFlowSelector,
@@ -53,5 +62,6 @@ export const createFlowState = <T>(init: T) => {
     getState,
     getInit,
     subscribe,
+    notify,
   };
 };

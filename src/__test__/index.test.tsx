@@ -18,7 +18,7 @@ describe('A few tests to get started', () => {
   test('It should maintain referential equality for untouched objects.', () => {
     const { result: fullRes } = renderHook(() => store.useFlowState());
     const { result: otherRes } = renderHook(() =>
-      store.useFlowSelector((s) => s.otherStuff)
+      store.useFlowSelector(({ otherStuff }) => otherStuff)
     );
     const [fullState] = fullRes.current;
     const { users } = fullState;

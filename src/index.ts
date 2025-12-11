@@ -1,8 +1,9 @@
 import { useSyncExternalStore } from 'react';
-import { produce } from 'immer';
 
 type Listener<T> = (state: T) => any;
-type UpdateFn<T> = (recipe: (draft: T) => void | T) => void;
+type UpdateFn<T> = (updater: Partial<T> | ((prev: T) => Partial<T>)) => void;
+
+const isObject = (obj: any) => obj?.constructor === Object;
 
 export const createFlowState = <T>(init: T) => {
   let state = init;
@@ -10,11 +11,22 @@ export const createFlowState = <T>(init: T) => {
   const getState = () => state;
   const getInit = () => init;
 
-  const update: UpdateFn<T> = (recipe) => {
-    const next = produce(state, recipe);
+  const update = (partial: Partial<T> | ((prev: T) => Partial<T>)) => {
+    let next: T;
+
+    if (typeof partial === 'function') {
+      const result = partial(state);
+      if (isObject(result) && isObject(state)) next = { ...state, ...result };
+      else next = result as T;
+    } else if (isObject(state) && isObject(partial)) {
+      next = { ...state, ...partial };
+    } else {
+      next = partial as T; // non object replacement.
+    }
+
     if (next !== state) {
       state = next;
-      listeners.forEach((l) => l(getState()));
+      listeners.forEach((l) => l(state));
     }
   };
 

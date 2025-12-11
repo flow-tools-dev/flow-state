@@ -24,7 +24,6 @@
     "test": "vitest"
   },
   "dependencies": {
-    "immer": "^11.0.1",
     "react": "^19.2.1",
     "tsdown": "^0.17.2",
     "typescript": "^5.9.3"

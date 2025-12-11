@@ -19,7 +19,7 @@
   "license": "MIT",
   "author": "Adam Allison",
   "type": "module",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "scripts": {
     "test": "vitest"
   },

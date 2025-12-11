@@ -30,12 +30,11 @@ export const createFlowState = <T>(init: T) => {
 
     if (next !== state) {
       setState(next);
-      notify();
+      notify(next);
     }
   };
 
-  const notify = () => {
-    const s = getState();
+  const notify = (s = getState()) => {
     listeners.forEach((l) => l(s));
   };
 

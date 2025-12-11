@@ -25,8 +25,6 @@
   },
   "dependencies": {
     "immer": "^11.0.1",
-    "lodash.get": "^4.4.2",
-    "lodash.set": "^4.3.2",
     "react": "^19.2.1",
     "tsdown": "^0.17.2",
     "typescript": "^5.9.3"

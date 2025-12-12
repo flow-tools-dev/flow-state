@@ -73,7 +73,7 @@ setUserProfile({ user: { name: 'Jimmy Bananas', age: 32 } }); // shallow merge.
 setUserProfile({ meh: {} }, true); // full state replacement. Removes description, user, etc. Just have meh now.
 ```
 
-Grab a slice of state, which will optimize your renders for you naturally via React's useSyncExternalStore, and also go buck-wild. For more details, see the API docs below.
+Grab a slice of state, which will optimize your renders for you, and also go buck-wild. For more details, see the API docs below.
 
 ```ts
 import { useUserSelector } from '../userStore';

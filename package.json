@@ -19,7 +19,13 @@
   "license": "MIT",
   "author": "Adam Allison",
   "type": "module",
-  "main": "src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.mjs",
   "scripts": {
     "test": "vitest",
     "build": "tsdown"

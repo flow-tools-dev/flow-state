@@ -133,7 +133,7 @@ Returns:
 - **notify** - Calls all listener callbacks with the Flow State. Note, you can manually pass in a value that will then get handed to all of the listeners, but it will not set the Flow State with that value.
 - **resetState** - Resets the Flow State to the original value.
 
-# Additional Notes
+# Additional Notes 
 
 - The shallow merge functionality works just like Zustand, and only on objects. All other data types will be simply replaced.
 - The useFlowSelector hook returns the full state update function. You update the your slice by updating the full Flow State object itself - then the slice value naturally updates, and all subscribers are notified.

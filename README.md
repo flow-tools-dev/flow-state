@@ -92,8 +92,6 @@ setUserProfile((state) => {
 });
 ```
 
-**Note** - If you update a key _not returned_ by your selector, you component will not re-render, as the specific slice has remained unchanged.
-
 And in a file, a million miles away -
 
 ```ts
@@ -132,10 +130,11 @@ Returns:
 - **subscribe** - Subscribes a function to Flow State changes. Returns an unsubscribe function.
 - **unsubscribe** - Unsubscribes a given function from the Flow State.
 - **unsubscribeAll** - Unsubscribes all listeners from the Flow State.
-- **notify** - Calls all listener callbacks with the Flow State. Note, you can manually pass in a value that will then get handed to all of the listeners, but this is not recommended.
+- **notify** - Calls all listener callbacks with the Flow State. Note, you can manually pass in a value that will then get handed to all of the listeners, but it will not set the Flow State with that value.
 - **resetState** - Resets the Flow State to the original value.
 
 # Additional Notes
 
-- The shallow merge functionality works just like Zustand, and only on objects.
-- The useFlowSelector hook returns the full state update function. To update a slice of state, you must update the full state in the FlowState store.
+- The shallow merge functionality works just like Zustand, and only on objects. All other data types will be simply replaced.
+- The useFlowSelector hook returns the full state update function. You update the your slice by updating the full Flow State object itself - then the slice value naturally updates, and all subscribers are notified.
+- If the full Flow State object is modified, but your slice returns the same value or composite data type in memory, it will *not* re-render your component. 

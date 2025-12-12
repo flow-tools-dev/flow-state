@@ -70,7 +70,7 @@ const [userProfile, setUserProfile] = useUserState();
 // will preserve the description state from above via shallow merge.
 setUserProfile({ user: { name: 'Jimmy B', age: 34 } }); // shallow merge.
 setUserProfile({ user: { name: 'Jimmy Bananas', age: 32 } }); // shallow merge.
-setUserProfile({ meh: {} }); // full state replacement. Removes description, user, etc. Just have meh now.
+setUserProfile({ meh: {} }, true); // full state replacement. Removes description, user, etc. Just have meh now.
 ```
 
 Grab a slice of state, which will optimize your renders for you naturally via React's useSyncExternalStore, and also go buck-wild. For more details, see the API docs below.
@@ -137,4 +137,4 @@ Returns:
 
 - The shallow merge functionality works just like Zustand, and only on objects. All other data types will be simply replaced.
 - The useFlowSelector hook returns the full state update function. You update the your slice by updating the full Flow State object itself - then the slice value naturally updates, and all subscribers are notified.
-- If the full Flow State object is modified, but your slice returns the same value or composite data type in memory, it will *not* re-render your component. 
+- If the full Flow State object is modified, but your slice returns the same value or composite data type in memory, it will _not_ re-render your component.
